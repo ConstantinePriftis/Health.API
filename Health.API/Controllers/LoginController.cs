@@ -66,15 +66,6 @@ namespace Health.API.Controllers
         {
             UserLoginDto user = null;
             var userFromDb = UsersRepository.GetUserByNameAndPassword(login.Name, login.Password);
-           // var loginResult = await _manager.PasswordSignInAsync(login.Name, login.Password, false, false);
-            //if(loginResult.)
-
-            //Validate the User Credentials  
-            //Demo Purpose, I have Passed HardCoded User Information  
-            //if (login.Name == "Jignesh")
-            //{
-            //    user = new UserLoginDto { Name = "Jignesh Trivedi", Email = "test.btest@gmail.com" };
-            //}
             return userFromDb;
         }
     }
