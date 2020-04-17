@@ -22,7 +22,6 @@ namespace Health.API.Controllers
     public class LoginController : ControllerBase
     {
         private IConfiguration _config;
-        private SignInManager<UserLoginDto> _manager;
 
         public IUsersRepository UsersRepository { get; }
 
@@ -37,7 +36,7 @@ namespace Health.API.Controllers
         public async Task<IActionResult> Login([FromBody]UserLoginDto login)
         {
             IActionResult response = Unauthorized();
-            var user =  AuthenticateUser(login);
+            var user = AuthenticateUser(login);
 
             if (user != null)
             {
@@ -62,19 +61,9 @@ namespace Health.API.Controllers
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        private  User AuthenticateUser(UserLoginDto login)
+        private User AuthenticateUser(UserLoginDto login)
         {
-            UserLoginDto user = null;
             var userFromDb = UsersRepository.GetUserByNameAndPassword(login.Name, login.Password);
-           // var loginResult = await _manager.PasswordSignInAsync(login.Name, login.Password, false, false);
-            //if(loginResult.)
-
-            //Validate the User Credentials  
-            //Demo Purpose, I have Passed HardCoded User Information  
-            //if (login.Name == "Jignesh")
-            //{
-            //    user = new UserLoginDto { Name = "Jignesh Trivedi", Email = "test.btest@gmail.com" };
-            //}
             return userFromDb;
         }
     }

@@ -1,4 +1,3 @@
-
 using System.Text;
 using Health.API.Contexts;
 using Health.API.Repositories;
@@ -14,9 +13,8 @@ using AutoMapper;
 using Health.API.Profiles;
 using Newtonsoft.Json.Serialization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
-using System;
 using Microsoft.AspNetCore.Http;
+using Health.API.RepositoryServices;
 
 namespace Health.API
 {
@@ -41,33 +39,34 @@ namespace Health.API
                 setupAction.SerializerSettings.ContractResolver =
                    new CamelCasePropertyNamesContractResolver();
             })
- .AddXmlDataContractSerializerFormatters()
-.ConfigureApiBehaviorOptions(setupAction =>
-{
-    setupAction.InvalidModelStateResponseFactory = context =>
-    {
-        var problemDetails = new ValidationProblemDetails(context.ModelState)
-        {
-            Type = "https://courselibrary.com/modelvalidationproblem",
-            Title = "One or more model validation errors occurred.",
-            Status = StatusCodes.Status422UnprocessableEntity,
-            Detail = "See the errors property for details.",
-            Instance = context.HttpContext.Request.Path
-        };
+             .AddXmlDataContractSerializerFormatters()
+            .ConfigureApiBehaviorOptions(setupAction =>
+            {
+                setupAction.InvalidModelStateResponseFactory = context =>
+                {
+                    var problemDetails = new ValidationProblemDetails(context.ModelState)
+                    {
+                        Type = "https://courselibrary.com/modelvalidationproblem",
+                        Title = "One or more model validation errors occurred.",
+                        Status = StatusCodes.Status422UnprocessableEntity,
+                        Detail = "See the errors property for details.",
+                        Instance = context.HttpContext.Request.Path
+                    };
 
-        problemDetails.Extensions.Add("traceId", context.HttpContext.TraceIdentifier);
+                    problemDetails.Extensions.Add("traceId", context.HttpContext.TraceIdentifier);
 
-        return new UnprocessableEntityObjectResult(problemDetails)
-        {
-            ContentTypes = { "application/problem+json" }
-        };
-    };
-});
+                    return new UnprocessableEntityObjectResult(problemDetails)
+                    {
+                        ContentTypes = { "application/problem+json" }
+                    };
+                };
+            });
 
 
             services.AddDbContext<HealthContext>();
             services.AddScoped<IUsersRepository, UserRepository>();
             services.AddScoped<ITemperatureRepository, TemperatureRepository>();
+            services.AddScoped<IFeverRepository, FeverRepository>();
             var mappingConfig = new MapperConfiguration(mc =>
             {
                 mc.AddProfile(new HealthProfile());
