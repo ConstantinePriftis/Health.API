@@ -19,17 +19,22 @@ namespace Health.API.Repositories
 
         public void AddFever(Fever fever)
         {
-            throw new NotImplementedException();
+            _healthContext.Fevers.Add(fever);
         }
 
-        public void DeleteFever(Guid feverId)
+        public void DeleteFever(Fever fever)
         {
-            throw new NotImplementedException();
+            _healthContext.Fevers.Remove(fever);
         }
 
         public IEnumerable<Fever> GetFeversForUSer(Guid userId)
         {
-            throw new NotImplementedException();
+            return _healthContext.Fevers.Where(x => x.UserId == userId).ToList();
+        }
+
+        public bool Save()
+        {
+            return (_healthContext.SaveChanges() > 1);
         }
     }
 }

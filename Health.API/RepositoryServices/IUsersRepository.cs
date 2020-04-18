@@ -1,4 +1,5 @@
 ﻿using Health.API.Models;
+using Health.API.ResourceParameters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,13 +9,18 @@ namespace Health.API.Services
 {
     public interface IUsersRepository
     {
-        Task<IList<User>> GetUsers();
+        IEnumerable<User> GetUsers(ResourceParams resourceParams);
 
-        Task<User> GetUserById();
+        User GetUserById(Guid id);
 
-        Task<int> AddUserAsync(User user);
+        void AddUser(User user);
 
         void DeleteUser(User user);
+
+        bool Save();
+
         User GetUserByNameAndPassword(string name, string password);
+
+
     }
 }

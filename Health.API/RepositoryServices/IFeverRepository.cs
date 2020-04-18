@@ -6,12 +6,11 @@ using System.Threading.Tasks;
 
 namespace Health.API.RepositoryServices
 {
-    interface IFeverRepository
+    public interface IFeverRepository
     {
         IEnumerable<Fever> GetFeversForUSer(Guid userId);
-
         void AddFever(Fever fever);
-
-        void DeleteFever(Guid feverId);
+        void DeleteFever(Fever fever);
+        bool Save();
     }
 }

@@ -3,14 +3,16 @@ using System;
 using Health.API.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Health.API.Migrations
 {
     [DbContext(typeof(HealthContext))]
-    partial class HealthContextModelSnapshot : ModelSnapshot
+    [Migration("20200418075859_RenewedTemperature")]
+    partial class RenewedTemperature
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -46,9 +48,6 @@ namespace Health.API.Migrations
                         .HasColumnType("char(36)");
 
                     b.Property<DateTime>("DateMeasured")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<DateTime>("DateModified")
                         .HasColumnType("datetime(6)");
 
                     b.Property<bool>("HasFever")

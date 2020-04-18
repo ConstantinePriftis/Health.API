@@ -5,10 +5,9 @@ using System.Threading.Tasks;
 
 namespace Health.API.Dtos
 {
-    public class TemperatureDto
+    public class FeverDto
     {
-        public bool HasFever { get; set; }
-        public double TemperatureValue { get; set; }
+        public double Temperature { get; set; }
         public DateTime DateMeasured { get; set; }
     }
 }

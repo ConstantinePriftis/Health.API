@@ -51,14 +51,7 @@ namespace Health.API.Contexts
                 temp.HasKey(k => k.Id);
                 temp.Property(p => p.TemperatureValue).IsRequired();
                 temp.Property(p => p.DateMeasured).IsRequired();
-            });
-
-            modelbuilder.Entity<Fever>(fever =>
-            {
-                fever.HasKey(k => k.Id);
-                fever.Property(p => p.Temperature).IsRequired();
-                fever.Property(p => p.DateMeasured).IsRequired();
-
+                temp.Property(p => p.HasFever);
             });
         }
 

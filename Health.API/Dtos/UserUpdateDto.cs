@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Health.API.Dtos
 {
-    public class UserCreateDto
+    public class UserUpdateDto
     {
         [Required]
         public string FirstName { get; set; }

@@ -1,6 +1,8 @@
 ﻿using Health.API.Contexts;
 using Health.API.Models;
+using Health.API.ResourceParameters;
 using Health.API.Services;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,39 +19,27 @@ namespace Health.API.Repositories
             _healthContext = healthContext;
         }
 
-        public async Task<int> AddUserAsync(User user)
+        public void AddUser(User user)
         {
             _healthContext.Users.Add(user ?? throw new ArgumentNullException(nameof(user)));
-            int modifiedRows = 0;
-            try
-            {
-                modifiedRows = _healthContext.SaveChanges();
-            }
-            catch (Exception e)
-            {
-
-                return modifiedRows;
-            }
-
-            return modifiedRows;
         }
 
-        public async void DeleteUser(User user)
+        public void DeleteUser(User user)
         {
-
+            _healthContext.Users.Remove(user ?? throw new ArgumentNullException(nameof(user)));
         }
 
-        public Task<User> GetUserById()
+        public User GetUserById(Guid id)
         {
-            throw new NotImplementedException();
+            return _healthContext.Users.FirstOrDefault(x => x.Id == id);
         }
 
         public User GetUserByNameAndPassword(string name, string password)
         {
             try
             {
-                var something = _healthContext.Users.FirstOrDefault(x => x.FirstName == name && x.Password == password);
-                return something;
+                var user = _healthContext.Users.FirstOrDefault(x => x.FirstName == name && x.Password == password);
+                return user;
             }
             catch (Exception e)
             {
@@ -58,9 +48,25 @@ namespace Health.API.Repositories
             }
         }
 
-        public Task<IList<User>> GetUsers()
+        public IEnumerable<User> GetUsers(ResourceParams resourceParams)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var userCollection = _healthContext.Users as IQueryable<User>;
+                return userCollection
+                         .Skip(resourceParams.PageSize * (resourceParams.PageNumber - 1))
+                         .Take(resourceParams.PageSize)
+                         .ToList();
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        public bool Save()
+        {
+            return (_healthContext.SaveChanges() > 1);
         }
     }
 }

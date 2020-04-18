@@ -13,10 +13,12 @@ namespace Health.API.Profiles
         public HealthProfile()
         {
             CreateMap<UserCreateDto, User>().ReverseMap();
+            CreateMap<UserUpdateDto, User>().ReverseMap();
+            CreateMap<UserDto, User>().ReverseMap();
             CreateMap<TemperatureCreateDto, Temperature>().ReverseMap();
             CreateMap<FeverCreateDto, Fever>().ReverseMap();
-
             CreateMap<Temperature, TemperatureDto>().ReverseMap();
+            CreateMap<Fever, FeverDto>().ReverseMap();
         }
     }
 }

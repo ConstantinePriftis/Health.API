@@ -1,5 +1,6 @@
 ﻿using Health.API.Contexts;
 using Health.API.Models;
+using Health.API.ResourceParameters;
 using Health.API.Services;
 using System;
 using System.Collections.Generic;
@@ -21,37 +22,49 @@ namespace Health.API.Repositories
             if (temperature == null)
                 throw new ArgumentNullException(nameof(temperature));
             _healthContext.Temperatures.Add(temperature);
-            _healthContext.SaveChanges();
-
         }
 
-        public Temperature GetTemperatureById(Guid id)
+        public void DeleteTemperature(Temperature temperature)
+        {
+            _healthContext.Remove(temperature);
+        }
+
+        public Temperature GetTemperatureById(Guid id, Guid userId)
         {
             Temperature temp = null;
             try
             {
-                temp = _healthContext.Temperatures.FirstOrDefault(x => x.Id == id);
+                temp = _healthContext.Temperatures.FirstOrDefault(x => x.Id == id && x.UserId == userId);
                 return temp;
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 return null;
             }
         }
 
-        public IEnumerable<Temperature> GetTemperaturesByUserId(Guid userId)
+
+        public IEnumerable<Temperature> GetTemperaturesByUserId(Guid userId, ResourceParameters.ResourceParams resourceParams)
         {
-            IEnumerable<Temperature> listOfTemperatures = new List<Temperature>();
             try
             {
-                listOfTemperatures = _healthContext.Temperatures.Where(x => x.UserId == userId).ToList();
-                return listOfTemperatures;
+                var temperaturesCollection = _healthContext.Temperatures as IQueryable<Temperature>;
+                var collectionToReturn = temperaturesCollection.Where(t => t.UserId == userId);
+                return collectionToReturn
+                         .Skip(resourceParams.PageSize * (resourceParams.PageNumber - 1))
+                         .Take(resourceParams.PageSize)
+                         .ToList();
             }
             catch (Exception)
             {
                 return null;
             }
 
+        }
+
+        public bool Save()
+        {
+            return (_healthContext.SaveChanges() > 1);
         }
     }
 }

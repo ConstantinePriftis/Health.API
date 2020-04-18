@@ -7,6 +7,8 @@
   <ItemGroup>
     <Compile Remove="Migrations\20200417113915_initial.cs" />
     <Compile Remove="Migrations\20200417113915_initial.Designer.cs" />
+    <Compile Remove="Migrations\20200418075818_RenewedTemperature.cs" />
+    <Compile Remove="Migrations\20200418075818_RenewedTemperature.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -32,6 +34,12 @@
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.2" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="3.1.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.3.2" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="5.3.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="ObjectValidation\" />
   </ItemGroup>
 
 

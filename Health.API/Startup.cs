@@ -15,6 +15,9 @@ using Newtonsoft.Json.Serialization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using Health.API.RepositoryServices;
+using Microsoft.OpenApi.Models;
+using System.Collections.Generic;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace Health.API
 {
@@ -62,6 +65,24 @@ namespace Health.API
                 };
             });
 
+            services.AddSwaggerGen(sw =>
+            {
+                sw.SwaggerDoc(name: "v1", new OpenApiInfo { Title = "Health.Api", Version = "v1" });
+                var security = new Dictionary<string, IEnumerable<string>>
+                {
+                    {"Bearer", new string[] { }},
+                };
+
+                sw.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
+                    Name = "Authorization",
+                    In  = ParameterLocation.Cookie,
+                    Type = SecuritySchemeType.ApiKey
+                });
+                sw.AddSecurityRequirement(new OpenApiSecurityRequirement() {});
+            });
+
 
             services.AddDbContext<HealthContext>();
             services.AddScoped<IUsersRepository, UserRepository>();
@@ -98,6 +119,12 @@ namespace Health.API
             {
                 app.UseDeveloperExceptionPage();
             }
+            app.UseSwagger();
+            app.UseSwaggerUI(sw =>
+            {
+                sw.SwaggerEndpoint(url: "/swagger/v1/swagger.json", name: "Health.Api v1");
+
+            });
 
             app.UseRouting();
             app.UseAuthentication();

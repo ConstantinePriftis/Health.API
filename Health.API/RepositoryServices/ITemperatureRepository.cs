@@ -1,4 +1,5 @@
 ﻿using Health.API.Models;
+using Health.API.ResourceParameters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,9 +11,12 @@ namespace Health.API.Services
     {
         void AddTemperatureForUser(Temperature temperature);
 
-        IEnumerable<Temperature> GetTemperaturesByUserId(Guid userId);
+        IEnumerable<Temperature> GetTemperaturesByUserId(Guid userId, ResourceParams resourceParams);
 
-        Temperature GetTemperatureById(Guid id);
+        Temperature GetTemperatureById(Guid id, Guid userId);
 
+        void DeleteTemperature(Temperature temperature);
+
+        bool Save();
     }
 }
