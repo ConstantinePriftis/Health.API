@@ -123,7 +123,8 @@ namespace Health.API.Controllers
             var entityFromDb = _temperatureRepository.GetTemperatureById(temperatureId, userId);
             if (entityFromDb == null)
             {
-
+                if (temperature > MinimumTemperature)
+                    _feverRepository.AddFever(Fever.Create(userId, temperature));
                 var temp = temperature > MinimumTemperature
                     ? Temperature.Create(userId, temperature, true)
                 : Temperature.Create(userId, temperature);
@@ -136,7 +137,11 @@ namespace Health.API.Controllers
             {
 
                 if (temperature > MinimumTemperature)
+                {
                     entityFromDb.ModifyTemperature(temperature, true);
+                    _feverRepository.AddFever(Fever.Create(userId, temperature));
+                }
+
                 entityFromDb.ModifyTemperature(temperature, false);
                 _temperatureRepository.Save();
             }
